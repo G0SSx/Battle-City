@@ -15,6 +15,10 @@ namespace _Code.Tank.Player
         
         private bool _canShoot => _shootingTimer <= 0;
         private IGameFactory _factory;
+
+        private bool _shootButtonPressed => 
+            Input.GetMouseButton(0) || 
+            Input.GetKeyDown(KeyCode.Space);
         
         [Inject]
         private void Construct(IGameFactory factory, PlayerConfig playerConfig)
@@ -35,7 +39,7 @@ namespace _Code.Tank.Player
             UpdateCooldown();
             tankVisual.UpdateVisual(movement);
             
-            if (Input.GetMouseButton(0) && _canShoot)
+            if (_shootButtonPressed && _canShoot)
                 ShootAndResetTimer();
         }
 
