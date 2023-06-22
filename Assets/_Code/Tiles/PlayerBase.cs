@@ -1,6 +1,6 @@
 using _Code.Infrastructure.Services;
 using _Code.Infrastructure.Services.Factories;
-using _Code.Logic;
+using _Code.TilePieces;
 using UnityEngine;
 using Zenject;
 
@@ -13,7 +13,8 @@ namespace _Code.Tiles
         private IGameFactory _factory;
         private GameObject _playerObject;
         private IMatchResult _matchResultService;
-
+        private PlayerBasePiece _basePiece;
+        
         [Inject]
         private void Init(IGameFactory factory, IMatchResult matchResultService)
         {
@@ -21,6 +22,12 @@ namespace _Code.Tiles
             _matchResultService = matchResultService;
         }
 
+        private void Awake()
+        {
+            _basePiece = GetComponentInChildren<PlayerBasePiece>();
+            _basePiece.OnDestroyed += LoseGame;
+        }
+        
         private void Start()
         {
             if (_playerSpawnPoint == null)
@@ -29,15 +36,11 @@ namespace _Code.Tiles
             _playerObject = _factory.CreatePlayer(_playerSpawnPoint.position);
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void LoseGame()
         {
-            if (other.transform.TryGetComponent(out PlayerBullet bullet))
-            {
-                bullet.SelfDestroy();
-                Destroy(gameObject);
-                Destroy(_playerObject);
-                _matchResultService.OnMatchLose();
-            }
+            _matchResultService.OnMatchLose();
+            Destroy(_playerObject);
+            Destroy(gameObject);
         }
     }
 }
