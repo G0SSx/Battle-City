@@ -1,4 +1,3 @@
-using _Code.Infrastructure.Services.Factories;
 using _Code.Logic;
 using _Code.Tiles.Factory;
 using _Code.UI.Factory;
@@ -11,19 +10,14 @@ namespace _Code.Infrastructure
     {
         private MapGenerator _mapGenerator;
         private ITileFactory _tileFactory;
-        private IGameFactory _gameFactory;
         private IUIFactory _uiFactory;
 
         [Inject]
-        private void Construct(ITileFactory tileFactory, IGameFactory gameFactory, IUIFactory uiFactory)
+        private void Construct(ITileFactory tileFactory, IUIFactory uiFactory)
         {
             _tileFactory = tileFactory;
-            _gameFactory = gameFactory;
             _uiFactory = uiFactory;
         }
-
-        private void Awake() => 
-            DontDestroyOnLoad(gameObject);
 
         private void Start()
         {

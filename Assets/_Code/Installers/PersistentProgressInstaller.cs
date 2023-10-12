@@ -9,8 +9,11 @@ namespace _Code.Installers
         {
             Container
                 .Bind<IPersistentProgress>()
-                .FromInstance(new PersistentProgress())
-                .AsSingle();
+                .To<PersistentProgress>()
+                .AsSingle()
+                .NonLazy();
+
+            // После етого момента 25:33 видео
         }
     }
 }

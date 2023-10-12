@@ -3,6 +3,7 @@ using _Code.Infrastructure.Services.Factories;
 using _Code.Infrastructure.Services.Progress;
 using _Code.UI.Windows;
 using UnityEngine;
+using Zenject;
 
 namespace _Code.UI.Factory
 {
@@ -15,15 +16,13 @@ namespace _Code.UI.Factory
         private readonly GameObject _healthText;
         private readonly GameObject _enemyCounter;
         
-        private readonly IPersistentProgress _progress;
-        private readonly IGameFactory _gameFactory;
-        
+        private IPersistentProgress _progress;
+        private IGameFactory _gameFactory;
         private IMatchResult _matchResult;
-
         private Transform _uiRoot;
 
-        public UIFactory(GameObject uiRoot, GameObject winWindow, GameObject looseWindow, GameObject scoreText,
-            GameObject healthText, GameObject enemyCounter, IPersistentProgress progress, IGameFactory gameFactory)
+        public UIFactory(GameObject uiRoot, GameObject winWindow, GameObject looseWindow, GameObject scoreText, GameObject healthText, 
+            GameObject enemyCounter)
         {
             _uiRootPrefab = uiRoot;
             _winWindow = winWindow;
@@ -31,15 +30,17 @@ namespace _Code.UI.Factory
             _scoreText = scoreText;
             _healthText = healthText;
             _enemyCounter = enemyCounter;
-            _progress = progress;
-            _gameFactory = gameFactory;
-        }
+		}
 
-        public void SetMatchResult(IMatchResult matchResult) => 
-            _matchResult = matchResult;
+        [Inject]
+        private void Construct(IPersistentProgress progress, IGameFactory gameFactory, IMatchResult matchResult)
+        {
+			_progress = progress;
+			_gameFactory = gameFactory;
+			_matchResult = matchResult;
+		}
 
-        public void CreateUIRoot() =>
-            _uiRoot = Object.Instantiate(_uiRootPrefab).transform;
+        public void CreateUIRoot() => _uiRoot = Object.Instantiate(_uiRootPrefab).transform;
 
         public GameObject CreateWinWindow()
         {

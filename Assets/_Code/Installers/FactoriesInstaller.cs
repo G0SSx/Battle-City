@@ -1,7 +1,6 @@
 using _Code.Configs;
 using _Code.Infrastructure.Services;
 using _Code.Infrastructure.Services.Factories;
-using _Code.Infrastructure.Services.Progress;
 using _Code.Tiles.Factory;
 using _Code.UI.Factory;
 using UnityEngine;
@@ -16,7 +15,7 @@ namespace _Code.Installers
         [SerializeField] private GameObject _enemyBulletPrefab;
         [SerializeField] private GameObject _enemyPrefab;
 
-        [Header("Configs")] 
+		[Header("Configs")] 
         [SerializeField] private EnemySpawnerConfig _enemySpawnerConfig;
         [SerializeField] private BulletConfig _bulletConfig;
 
@@ -33,47 +32,53 @@ namespace _Code.Installers
         [SerializeField] private GameObject _scoreText;
         [SerializeField] private GameObject _healthText;
         [SerializeField] private GameObject _enemyCounter;
-        
-        private IPersistentProgress _progress;
 
-        [Inject]
-        private void Construct(IPersistentProgress progress) => 
-            _progress = progress;
-
-        public override void InstallBindings()
+		public override void InstallBindings()
         {
-            IGameFactory gameFactory = CreateGameFactory();
-            
             Container
                 .Bind<IGameFactory>()
-                .FromInstance(gameFactory)
-                .AsSingle();
+                .To<GameFactory>()
+                .AsSingle()
+                .WithArguments(_playerPrefab, _enemyPrefab, _playerBulletPrefab, Container, _enemyBulletPrefab, _bulletConfig);
 
             Container
                 .Bind<ITileFactory>()
-                .FromInstance(new TileFactory(_destructibleTilePrefabs, _indestructibleTilePrefabs, _playerBaseTile,
-                    _enemySpawnTile, Container, _enemySpawnerConfig))
-                .AsSingle();
+                .To<TileFactory>()
+				.AsSingle()
+				.WithArguments(_destructibleTilePrefabs, _indestructibleTilePrefabs, _playerBaseTile, _enemySpawnTile, Container, 
+                _enemySpawnerConfig);
 
-            IUIFactory uiFactory = new UIFactory(_uiRootPrefab, _winWindow, _looseWindow, _scoreText, _healthText,
-                _enemyCounter, _progress, gameFactory);
-            
-            IMatchResult matchResult = new MatchResult(uiFactory);
             Container
                 .Bind<IMatchResult>()
-                .FromInstance(matchResult)
+                .To<MatchResult>()
                 .AsSingle();
             
-            uiFactory.SetMatchResult(matchResult);
             Container
                 .Bind<IUIFactory>()
-                .FromInstance(uiFactory)
-                .AsSingle();
-        }
+                .To<UIFactory>()
+				.AsSingle()
+				.WithArguments(_uiRootPrefab, _winWindow, _looseWindow, _scoreText, _healthText, _enemyCounter);
 
-        private GameFactory CreateGameFactory() =>
-            new(_playerPrefab, _enemyPrefab, _playerBulletPrefab, Container,
-                _enemyBulletPrefab,
-                _bulletConfig);
-    }
+			/*
+			1. Можно давать разньіе реализации интерфейса по Id
+            Container
+                .Bind<IMatchResult>()
+                .To<MatchResult>()
+                .AsSingle()
+                .WithConcreteId("Hello world");
+
+            [Inject(Id = "Hello world")]
+            private IMatchResult _matchResult;
+
+            2. Можно вьіставлять условия инджекции
+            Container
+                .Bind<IMatchResult>()
+                .To<MathResult>()
+                .AsSingle()
+                .When(obj => obj.type == typeof(UIFactory));
+             
+			 3. Дефолтное значение инджекции AsTransient() а не AsInstance()
+			 */
+		}
+	}
 }

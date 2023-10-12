@@ -2,6 +2,7 @@ using System;
 using _Code.UI.Factory;
 using _Code.UI.Windows;
 using UnityEngine;
+using Zenject;
 
 namespace _Code.Infrastructure.Services
 {
@@ -11,15 +12,19 @@ namespace _Code.Infrastructure.Services
         public Action OnMatchLose { get; }
         public Action MatchWon { get; }
 
-        private readonly IUIFactory _uiFactory;
+        private IUIFactory _uiFactory;
 
-        public MatchResult(IUIFactory uiFactory)
+        public MatchResult()
         {
-            _uiFactory = uiFactory;
-            
             OnMatchLose += LoseMatch;
             MatchWon += WinMatch;
-        }
+		}
+
+        [Inject]
+        private void Construct(IUIFactory uiFactory)
+        {
+			_uiFactory = uiFactory;
+		}
 
         private void WinMatch()
         {

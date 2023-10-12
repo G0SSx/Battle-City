@@ -11,6 +11,5 @@ namespace _Code.UI.Factory
         GameObject CreateScoreText();
         GameObject CreateHealth();
         GameObject CreateEnemyCounter();
-        void SetMatchResult(IMatchResult matchResult);
     }
 }
