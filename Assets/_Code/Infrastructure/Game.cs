@@ -29,8 +29,8 @@ namespace _Code.Infrastructure
         {
             _uiFactory.CreateUIRoot();
             _uiFactory.CreateEnemyCounter();
-            _uiFactory.CreateHealth();
-            _uiFactory.CreateScoreText();
+            _uiFactory.CreateHealthCounter();
+            _uiFactory.CreateScoreCounter();
         }
 
         private void GenerateMap()

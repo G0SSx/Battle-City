@@ -1,10 +1,8 @@
 using _Code.Infrastructure.Services.Progress;
 using Zenject;
 
-namespace _Code.Installers
-{
-    public class PersistentProgressInstaller : MonoInstaller
-    {
+namespace _Code.Installers {
+	public class PersistentProgressInstaller : Installer<PersistentProgressInstaller> {
         public override void InstallBindings()
         {
             Container
@@ -12,8 +10,6 @@ namespace _Code.Installers
                 .To<PersistentProgress>()
                 .AsSingle()
                 .NonLazy();
-
-            // После етого момента 25:33 видео
-        }
+		}
     }
 }

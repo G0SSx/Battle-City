@@ -1,4 +1,3 @@
-using _Code.Infrastructure.Services;
 using UnityEngine;
 
 namespace _Code.UI.Factory
@@ -7,9 +6,9 @@ namespace _Code.UI.Factory
     {
         void CreateUIRoot();
         GameObject CreateWinWindow();
-        GameObject CreateLooseWindow();
-        GameObject CreateScoreText();
-        GameObject CreateHealth();
+        GameObject CreateDefeatWindow();
+        GameObject CreateScoreCounter();
+        GameObject CreateHealthCounter();
         GameObject CreateEnemyCounter();
     }
 }

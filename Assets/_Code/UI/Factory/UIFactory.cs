@@ -11,7 +11,7 @@ namespace _Code.UI.Factory
     {
         private readonly GameObject _uiRootPrefab;
         private readonly GameObject _winWindow;
-        private readonly GameObject _looseWindow;
+        private readonly GameObject _defeatWindow;
         private readonly GameObject _scoreText;
         private readonly GameObject _healthText;
         private readonly GameObject _enemyCounter;
@@ -21,15 +21,14 @@ namespace _Code.UI.Factory
         private IMatchResult _matchResult;
         private Transform _uiRoot;
 
-        public UIFactory(GameObject uiRoot, GameObject winWindow, GameObject looseWindow, GameObject scoreText, GameObject healthText, 
-            GameObject enemyCounter)
+        public UIFactory()
         {
-            _uiRootPrefab = uiRoot;
-            _winWindow = winWindow;
-            _looseWindow = looseWindow;
-            _scoreText = scoreText;
-            _healthText = healthText;
-            _enemyCounter = enemyCounter;
+            _uiRootPrefab = AssetProvider.Load(PathProvider.UIRoot);
+            _winWindow = AssetProvider.Load(PathProvider.WinWindow);
+            _defeatWindow = AssetProvider.Load(PathProvider.DefeatWindow);
+            _scoreText = AssetProvider.Load(PathProvider.ScoreCounter);
+            _healthText = AssetProvider.Load(PathProvider.HealthCounter);
+            _enemyCounter = AssetProvider.Load(PathProvider.EnemyCounter);
 		}
 
         [Inject]
@@ -52,17 +51,17 @@ namespace _Code.UI.Factory
             return prefab;
         }
 
-        public GameObject CreateLooseWindow()
+        public GameObject CreateDefeatWindow()
         {
-            GameObject prefab = Object.Instantiate(_looseWindow, _uiRoot);
+            GameObject prefab = Object.Instantiate(_defeatWindow, _uiRoot);
 
-            prefab.GetComponent<LooseWindow>()
+            prefab.GetComponent<DefeatWindow>()
                 .Init(_progress);
 
             return prefab;
         }
 
-        public GameObject CreateScoreText()
+        public GameObject CreateScoreCounter()
         {
             GameObject prefab = Object.Instantiate(_scoreText, _uiRoot);
             
@@ -72,7 +71,7 @@ namespace _Code.UI.Factory
             return prefab;
         }
 
-        public GameObject CreateHealth()
+        public GameObject CreateHealthCounter()
         {
             GameObject player = Object.Instantiate(_healthText, _uiRoot);
 

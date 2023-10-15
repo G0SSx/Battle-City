@@ -58,7 +58,7 @@ namespace _Code.Logic
             if (_indestructibleTileAmount == IndestructibleTileMaxAmount)
                 return TileType.Destructible;
             
-            return GetRandomObstacleTileAndAddIfIndestructible();;
+            return GetRandomObstacleTileAndAddIfIndestructible();
         }
 
         private TileType GetRandomObstacleTileAndAddIfIndestructible()

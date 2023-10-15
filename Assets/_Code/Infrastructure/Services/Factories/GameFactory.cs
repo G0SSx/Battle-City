@@ -13,23 +13,23 @@ namespace _Code.Infrastructure.Services.Factories
         public event Action<TankHealth> OnEnemyCreated;
         public event Action<TankHealth> OnPlayerCreated;
 
+        private readonly DiContainer _container;
         private readonly GameObject _playerPrefab;
         private readonly GameObject _enemyPrefab;
         private readonly GameObject _playerBulletPrefab;
-        private readonly DiContainer _container;
         private readonly GameObject _enemyBulletPrefab;
         private readonly BulletConfig _bulletConfig;
         
-        public GameFactory(GameObject playerPrefab, GameObject enemyPrefab, GameObject playerBulletPrefab,
-            DiContainer container, GameObject enemyBulletPrefab, BulletConfig bulletConfig)
+        public GameFactory(DiContainer container, BulletConfig bulletConfig)
         {
-            _playerPrefab = playerPrefab;
-            _enemyPrefab = enemyPrefab;
-            _playerBulletPrefab = playerBulletPrefab;
             _container = container;
-            _enemyBulletPrefab = enemyBulletPrefab;
             _bulletConfig = bulletConfig;
-        }
+
+			_playerPrefab = AssetProvider.Load(PathProvider.Player);
+			_playerBulletPrefab = AssetProvider.Load(PathProvider.PlayerBullet);
+			_enemyPrefab = AssetProvider.Load(PathProvider.Enemy);
+			_enemyBulletPrefab = AssetProvider.Load(PathProvider.EnemyBullet);
+		}
 
         public GameObject CreatePlayer(Vector2 position)
         {
@@ -71,5 +71,5 @@ namespace _Code.Infrastructure.Services.Factories
             bulletPrefab.GetComponent<PlayerBullet>()
                 .Speed = _bulletConfig.Speed;
         }
-    }
+	}
 }

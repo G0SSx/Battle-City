@@ -16,9 +16,7 @@ namespace _Code.Tank.Player
         private bool _canShoot => _shootingTimer <= 0;
         private IGameFactory _factory;
 
-        private bool _shootButtonPressed => 
-            Input.GetMouseButton(0) || 
-            Input.GetKeyDown(KeyCode.Space);
+        private bool _shootButtonPressed => Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space);
         
         [Inject]
         private void Construct(IGameFactory factory, PlayerConfig playerConfig)
@@ -30,8 +28,7 @@ namespace _Code.Tank.Player
             _health.Health = playerConfig.Health;
         }
 
-        private void Awake() =>
-            CreateBehaviour();
+        private void Awake() => CreateBehaviour();
         
         private void Update()
         {
@@ -43,23 +40,19 @@ namespace _Code.Tank.Player
                 ShootAndResetTimer();
         }
 
-        private void ShootAndResetTimer()
+		private void FixedUpdate() => tankMovement.Move(movement);
+
+		private void ShootAndResetTimer()
         {
             Shoot();
             ResetShootingTimer();
         }
 
-        private void Shoot() => 
-            _factory.CreatePlayerBullet(bulletSpawnTransform.position, bulletSpawnTransform.rotation);
+        private void Shoot() => _factory.CreatePlayerBullet(bulletSpawnTransform.position, bulletSpawnTransform.rotation);
 
-        private void ResetShootingTimer() => 
-            _shootingTimer = _shootingCooldown;
+        private void ResetShootingTimer() => _shootingTimer = _shootingCooldown;
 
-        private void UpdateCooldown() => 
-            _shootingTimer -= Time.deltaTime;
-
-        private void FixedUpdate() => 
-            tankMovement.Move(movement);
+        private void UpdateCooldown() => _shootingTimer -= Time.deltaTime;
 
         private void UpdateInput()
         {

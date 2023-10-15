@@ -32,17 +32,19 @@ namespace _Code.Infrastructure.Services
             
             IsEnded = true;
             
-            winWindowPrefab.GetComponent<WinWindow>()
-                    .Show();
+            winWindowPrefab
+                .GetComponent<WinWindow>()
+                .Show();
         }
 
         private void LoseMatch()
         {
-            GameObject looseWindowPrefab = _uiFactory.CreateLooseWindow();
+            GameObject looseWindowPrefab = _uiFactory.CreateDefeatWindow();
             
             IsEnded = true;
             
-            looseWindowPrefab.GetComponent<LooseWindow>()
+            looseWindowPrefab
+                .GetComponent<DefeatWindow>()
                 .Show();
         }
     }
